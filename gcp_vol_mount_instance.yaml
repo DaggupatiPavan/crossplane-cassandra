@@ -10,7 +10,7 @@ spec:
   forProvider:
     attachedDisk:
     - deviceName: diskgcp
-    - source: diskgcp
+      source: diskgcp
     bootDisk:
     - initializeParams:
       - image: ubuntu-os-cloud/ubuntu-2004-lts
