@@ -1,0 +1,34 @@
+apiVersion: compute.gcp.upbound.io/v1beta1
+kind: Instance
+metadata:
+  annotations:
+    meta.upbound.io/example-id: compute/v1beta1/instance
+  labels:
+    testing.upbound.io/example-name: vol-cassandra_instance
+  name: vol-cassandra-instance
+spec:
+  forProvider:
+    attachedDisk:
+    - deviceName: diskgcp
+      source: diskgcp
+    bootDisk:
+    - initializeParams:
+      - image: ubuntu-os-cloud/ubuntu-2004-lts
+    machineType: e2-medium
+    metadata:
+      environment: dev
+    metadataStartupScript: apt update -y && apt install openjdk-8-jdk -y && apt install apt-transport-https -y && wget -q -O - https://www.apache.org/dist/cassandra/KEYS | sudo apt-key add - && echo "deb http://www.apache.org/dist/cassandra/debian 40x main" | sudo tee -a /etc/apt/sources.list.d/cassandra.sources.list && apt update -y && apt install cassandra -y && sleep 60 && mkdir -p /home/kgopi424/.ssh && echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCyNkOqGdKsvxXkyLZW3XL58fJdklWe3F5hhN7dQXyP/Eh+lzhlukzRxnqeNc0LAVUhbHXkU7/QnfAgJvjgQ78nYBa7z0SQQHVdyFpXlPu6k+eQhrSFW1ze/Keo/PftdrrXjj0H/QxU7TNXPnLlUb5PS8hYZisfEky1WDTx7a6HU898d2EGXuNpjwj2D6KUkm3b6Mn+C/SmBmvAgfFMqQyVRK1eSAVuJyGP0MEK4y1QMcyVV3AOv6oP4sIb+v6bg9/ZJnqZLUcTkMnZOkFKvQOXLJHiTeFYw4AW4VN0kWwJ520y8emUZhcp5vxN1hg9wWlINxDNF21egF45tsKYxKzZ kgopi424" > /home/kgopi424/.ssh/authorized_keys
+    networkInterface:
+    - accessConfig:
+      - {}
+      networkSelector:
+        matchLabels:
+          testing.upbound.io/example-name: cassandra_instance_network
+      subnetworkSelector:
+        matchLabels:
+          testing.upbound.io/example-name: cassandra_instance_network
+    tags:
+    - test
+    zone: us-south1-a
+
+
