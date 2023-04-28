@@ -4,8 +4,8 @@ metadata:
   annotations:
     meta.upbound.io/example-id: compute/v1beta1/instance
   labels:
-    testing.upbound.io/example-name: example_instance_network
-  name: example-instance-network
+    testing.upbound.io/example-name: cassandra_instance_network
+  name: cassandra-instance-network
 spec:
   forProvider:
     autoCreateSubnetworks: false
@@ -18,14 +18,14 @@ metadata:
   annotations:
     meta.upbound.io/example-id: compute/v1beta1/instance
   labels:
-    testing.upbound.io/example-name: example_instance_network
-  name: example-instance-subnetwork
+    testing.upbound.io/example-name: cassandra_instance_network
+  name: cassandra-instance-subnetwork
 spec:
   forProvider:
     ipCidrRange: 10.0.0.0/16
     networkSelector:
       matchLabels:
-        testing.upbound.io/example-name: example_instance_network
+        testing.upbound.io/example-name: cassandra_instance_network
     region: us-south1
 
 ---
@@ -36,8 +36,8 @@ metadata:
   annotations:
     meta.upbound.io/example-id: compute/v1beta1/firewall
   labels:
-    testing.upbound.io/example-name: example_firewall
-  name: example-firewall
+    testing.upbound.io/example-name: cassandra_firewall
+  name: cassandra-firewall
 spec:
   forProvider:
     allow:
@@ -48,5 +48,5 @@ spec:
     direction: INGRESS
     networkSelector:
       matchLabels:
-        testing.upbound.io/example-name: example_instance_network
+        testing.upbound.io/example-name: cassandra_instance_network
     sourceRanges: ["0.0.0.0/0"]
