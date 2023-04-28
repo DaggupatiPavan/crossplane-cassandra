@@ -1,0 +1,149 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: VPC
+metadata:
+  name: cassandra-vpc
+spec:
+  forProvider:
+    region: us-east-1
+    cidrBlock: 10.0.0.0/16
+    enableDnsHostnames: true
+    enableDnsSupport: true
+    tags:
+      Name: cassandra-vpc
+
+---
+
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Subnet
+metadata:
+  labels:
+    testing.upbound.io/example-name: cassandra-subnet-1
+  name: cassandra-subnet-1
+spec:
+  forProvider:
+    region: us-east-1
+    availabilityZone: us-east-1a
+    cidrBlock: 10.0.1.0/24
+    vpcIdRef:
+      name: cassandra-vpc
+    tags:
+      Name: cassandra-subnet-1
+
+---
+
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: RouteTableAssociation
+metadata:
+  labels:
+    testing.upbound.io/example-name: cassandra-route-table-association
+  name: cassandra-route-table-association
+spec:
+  forProvider:
+    region: us-east-1
+    routeTableIdRef:
+      name: cassandra-route-table
+    subnetIdRef:
+      name: cassandra-subnet-1
+---
+
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: RouteTable
+metadata:
+  name: cassandra-route-table
+  labels:
+    testing.upbound.io/example-name: cassandra-route-table
+spec:
+  forProvider:
+    region: us-east-1
+    tags:
+      Name: cassandra-route-table
+    vpcIdRef:
+      name: cassandra-vpc
+
+---
+
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: InternetGateway
+metadata:
+  name: cassandra-gw
+spec:
+  forProvider:
+    region: us-east-1
+    tags:
+      Name: cassandra-gw
+    vpcIdRef:
+      name: cassandra-vpc
+
+---
+
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Route
+metadata:
+  name: cassandra-route
+spec:
+  forProvider:
+    region: us-east-1
+    destinationCidrBlock: 0.0.0.0/0
+    gatewayIdRef:
+      name: cassandra-gw
+    routeTableIdRef:
+      name: cassandra-route-table
+
+---
+
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: SecurityGroup
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ec2/v1beta1/securitygrouprule
+  labels:
+    selector: cassandra-sg
+  name: cassandra-sg
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    tags:
+      Name: cassandra-sg
+    region: us-east-1
+    vpcIdRef:
+      name: cassandra-vpc
+
+---
+
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: SecurityGroupRule
+metadata:
+  name: cassandra-sg-rule-ing
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    cidrBlocks:
+      - 0.0.0.0/0
+    fromPort: 0
+    protocol: all
+    region: us-east-1
+    securityGroupIdSelector:
+      matchLabels:
+        selector: cassandra-sg
+    toPort: 65535
+    type: ingress
+
+---
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: SecurityGroupRule
+metadata:
+  name: cassandra-sg-rule-egg
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    cidrBlocks:
+      - 0.0.0.0/0
+    fromPort: 0
+    protocol: all
+    region: us-east-1
+    securityGroupIdSelector:
+      matchLabels:
+        selector: cassandra-sg
+    toPort: 65535
+    type: egress
+

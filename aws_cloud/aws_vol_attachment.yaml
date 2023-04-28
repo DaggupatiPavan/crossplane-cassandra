@@ -1,0 +1,12 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: VolumeAttachment
+metadata:
+  name: cassandra-volume-attachment
+spec:
+  forProvider:
+    deviceName: /dev/xvdf
+    instanceIdRef:
+      name: cassandra-instance
+    region: us-east-1
+    volumeIdRef:
+      name: cassandra-volume

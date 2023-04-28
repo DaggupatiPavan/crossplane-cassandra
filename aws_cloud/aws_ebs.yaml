@@ -1,0 +1,15 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: EBSVolume
+metadata:
+  annotations:
+    meta.upbound.io/example-id: ec2/v1beta1/snapshotcreatevolumepermission
+  labels:
+    testing.upbound.io/example-name: cassandra-volume
+  name: cassandra-volume
+spec:
+  forProvider:
+    availabilityZone: us-east-1a
+    region: us-east-1
+    size: 5
+    tags:
+      Name: cassandra-volume

@@ -1,0 +1,21 @@
+apiVersion: ec2.aws.upbound.io/v1beta1
+kind: Instance
+metadata:
+  annotations:
+    uptest.upbound.io/timeout: "3600"
+  name: cassandra-instance
+spec:
+  forProvider:
+    region: us-east-1
+    availabilityZone: us-east-1a
+    ami: ami-034a04b141839113c
+    associatePublicIpAddress: true
+    instanceType: t2.medium
+    keyName: cassandra
+    tags:
+      Name: cassandra-instance
+    subnetIdRef:
+      name: cassandra-subnet-1
+    vpcSecurityGroupIdRefs:
+      - name: cassandra-sg
+
